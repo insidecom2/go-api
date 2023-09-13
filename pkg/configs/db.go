@@ -1,14 +1,25 @@
 package configs
 
-const (
-	DBHOST     = "127.0.0.1"
-	DBPORT     = "5432"
-	DBNAME     = "db_go"
-	DBUSER     = "root"
-	DBPASSWORD = "root"
-	DBTYPE     = "postgres"
+import (
+	"fmt"
+	"os"
 )
 
-func GetDBType() string {
-	return DBTYPE
+func GetDBDriver() string {
+	return os.Getenv("DBDRIVER")
+}
+
+func GetConnectionString() string {
+
+	db := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s TimeZone=%s password=%s",
+		os.Getenv("DBHOST"),
+		os.Getenv("DBPORT"),
+		os.Getenv("DBUSER"),
+		os.Getenv("DBNAME"),
+		os.Getenv("DBSSL"),
+		os.Getenv("TIMEZONE"),
+		os.Getenv("DBPASSWORD"),
+	)
+
+	return db
 }

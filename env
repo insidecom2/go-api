@@ -1,0 +1,8 @@
+DBHOST     = ""
+DBPORT     = "5432"
+DBNAME     = ""
+DBUSER     = ""
+DBPASSWORD = ""
+DBDRIVER   = "postgres"
+DBSSL      = "disable"
+TIMEZONE   = "Asia/Bangkok"
