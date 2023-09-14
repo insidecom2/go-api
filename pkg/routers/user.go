@@ -20,5 +20,6 @@ func InitUserRoute(e *echo.Echo) {
 	v1 := e.Group("/api/v1")
 	{
 		v1.GET("/users", userControllers.GetUser)
+		v1.POST("/users", userControllers.CreateUser)
 	}
 }
