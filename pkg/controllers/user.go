@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"demoecho/pkg/interfaces"
+	"demoecho/pkg/response"
 	"demoecho/pkg/services"
 	"net/http"
-	"strings"
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
@@ -17,38 +17,42 @@ var (
 type UserController interface {
 	GetUser(c echo.Context) (err error)
 	CreateUser(c echo.Context) (err error)
+	Validate(c echo.Context, i interface{}) error 
 }
 
-type controllers struct{}
+type controllers struct{
+}
+
 
 func NewUserController(services services.UserService) UserController {
 	userService = services
 	return &controllers{}
 }
 
+func (con *controllers) GetUser(c echo.Context) (err error) {
+	
+	 id := c.Param("id")
 
-func (*controllers) GetUser(c echo.Context) (err error) {
-	user := &interfaces.User{
-		Name:    c.QueryParam("name"),
-		Surname: c.QueryParam("surname"),
+	if err != nil {
+		return err
 	}
-	result := userService.GetUserService(user)
+
+	result := userService.GetUserService(id)
 
 	return c.JSON(http.StatusOK, result)
 }
 
-func (*controllers) CreateUser(c echo.Context) (err error) {
+func (con *controllers) CreateUser(c echo.Context) error {
 	
-	var user interfaces.User
-	v := validator.New()
-	if err := c.Bind(&user); err != nil {
-		return err
-	}
-	if err := v.Struct(user); err != nil {
-		return c.JSON(http.StatusBadRequest, strings.Split(err.Error(),"\n"))
-	}
+	user := new(interfaces.User)
 
-	result := userService.GetUserService(&user)
+	v := con.Validate(c,user)
+
+	if v != nil {
+		return v
+	}
+	
+	result := userService.CreateUserService(user)
 
 	resUser := &interfaces.ResponseUser{
 		Name: result.Name,
@@ -58,4 +62,20 @@ func (*controllers) CreateUser(c echo.Context) (err error) {
 
 	return c.JSON(http.StatusOK, resUser)
 
+}
+
+func (con *controllers) Validate(c echo.Context, i interface{}) error {
+
+	v := validator.New()
+	if err := c.Bind(&i); err != nil {
+		c.JSON(http.StatusBadRequest, response.ResponseValidator(err.Error()))
+		return err
+	}
+
+	if err := v.Struct(i); err != nil {
+		c.JSON(http.StatusBadRequest, response.ResponseValidator(err.Error()))
+		return err
+	}
+
+	return nil;
 }
