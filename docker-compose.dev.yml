@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      dockerfile: ./Dockerfile-dev
+    ports:
+      - 8001:8001
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    ports:
+      - 54322:5432
+    volumes:
+      - ./db_posgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=db_go

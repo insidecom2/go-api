@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"demoecho/pkg/interfaces"
+	"demoecho/pkg/models"
 	"demoecho/pkg/response"
 	"demoecho/pkg/services"
 	"net/http"
@@ -32,19 +32,24 @@ func NewUserController(services services.UserService) UserController {
 func (con *controllers) GetUser(c echo.Context) (err error) {
 	
 	 id := c.Param("id")
+	 
+	result,err := userService.GetUserService(id)
 
 	if err != nil {
-		return err
+		return c.JSON(http.StatusBadRequest, response.ResponseFail("Not found user"))
 	}
-
-	result := userService.GetUserService(id)
-
-	return c.JSON(http.StatusOK, result)
+	resUser := &response.ResponseUser{
+		ID: result.ID,
+		Name: result.Name,
+		Surname: result.Surname,
+		Email: result.Email,
+	}
+	return c.JSON(http.StatusOK, response.ResponseSuccess("OK",resUser))
 }
 
 func (con *controllers) CreateUser(c echo.Context) error {
 	
-	user := new(interfaces.User)
+	user := new(models.User)
 
 	v := con.Validate(c,user)
 
@@ -52,15 +57,20 @@ func (con *controllers) CreateUser(c echo.Context) error {
 		return v
 	}
 	
-	result := userService.CreateUserService(user)
+	result,err := userService.CreateUserService(*user)
+ 
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.ResponseFail("Cannot create user"))
+	}
 
-	resUser := &interfaces.ResponseUser{
+	resUser := &response.ResponseUser{
+		ID: result.ID,
 		Name: result.Name,
 		Surname: result.Surname,
 		Email: result.Email,
 	}
 
-	return c.JSON(http.StatusOK, resUser)
+	return c.JSON(http.StatusOK, response.ResponseSuccess("OK",resUser))
 
 }
 

@@ -3,6 +3,7 @@
 #
 # Binaries for programs and plugins
 .env
+.env.docker
 *.exe
 *.exe~
 *.dll
@@ -20,3 +21,5 @@
 
 # Go workspace file
 go.work
+
+db_posgres/*

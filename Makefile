@@ -1,2 +1,2 @@
-run :
-	nodemon --exec go run server.go --signal SIGTERM
+run dev :
+	docker-compose -f docker-compose.dev.yml  up

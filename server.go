@@ -1,8 +1,7 @@
 package main
 
 import (
-	"demoecho/pkg/db"
-	"demoecho/pkg/models"
+	"demoecho/pkg/database"
 	"demoecho/pkg/routers"
 	"log"
 
@@ -18,10 +17,10 @@ func main() {
 		log.Panic("Cannot get .env file")
 	}
 	// connect DB //
-	db.ConnectDB()
+	database.ConnectDB()
 
 	// migration //
-	models.AutoMigration()
+	database.AutoMigration()
 
 	// routes
 	routers.InitUserRoute(e)

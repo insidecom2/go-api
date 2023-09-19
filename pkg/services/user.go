@@ -1,29 +1,44 @@
 package services
 
 import (
-	"demoecho/pkg/interfaces"
+	"demoecho/pkg/models"
+	"demoecho/pkg/repositories"
+	"log"
 )
 
 type UserService interface {
-	GetUserService(id string) string
-	CreateUserService(u *interfaces.User) *interfaces.User
+	GetUserService(id string) (models.User,error)
+	CreateUserService(u models.User) (models.User,error)
 }
 
 type services struct{}
 
-func NewUserService() UserService {
+var (
+	userRepo repositories.UserRepository
+)
+
+func NewUserService(repositories repositories.UserRepository) UserService {
+	userRepo = repositories
 	return &services{}
 }
 
 
-func (*services) GetUserService(id string)  string {
+func (s *services) GetUserService(id string)  (models.User,error) {
 
-	return id
+	log.Printf("Param2345 : %s",id)
 
+	result,err := userRepo.GetUserRepository(id)
+	
+	return result,err
 }
 
-func (*services) CreateUserService(u *interfaces.User) *interfaces.User {
+func (s *services) CreateUserService(u models.User) (models.User,error){
 
-	return u
+	result ,err := userRepo.CreateUserRepository(u)
+
+	if err != nil {
+		return u,err
+	}
+	return result,nil
 
 }

@@ -2,14 +2,16 @@ package routers
 
 import (
 	"demoecho/pkg/controllers"
+	"demoecho/pkg/repositories"
 	"demoecho/pkg/services"
 
 	"github.com/labstack/echo/v4"
 )
 
 var (
-	userService     services.UserService       = services.NewUserService()
-	userControllers controllers.UserController = controllers.NewUserController(userService)
+	userRepo     	repositories.UserRepository       	= repositories.NewUserRepo()
+	userService     services.UserService       			= services.NewUserService(userRepo)
+	userControllers controllers.UserController 			= controllers.NewUserController(userService)
 )
 
 type Router interface {
