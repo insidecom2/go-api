@@ -1,30 +1,30 @@
 package controllers
 
 import (
+	"demoecho/pkg/validators"
 	"demoecho/pkg/models"
 	"demoecho/pkg/response"
 	"demoecho/pkg/services"
 	"net/http"
 
-	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 )
 
 var (
 	userService services.UserService
+	validatorReq validators.Validator
 )
 
 type UserController interface {
 	GetUser(c echo.Context) (err error)
 	CreateUser(c echo.Context) (err error)
-	Validate(c echo.Context, i interface{}) error 
 }
 
-type controllers struct{
-}
+type controllers struct{}
 
 
 func NewUserController(services services.UserService) UserController {
+	validatorReq = validators.NewValidate()
 	userService = services
 	return &controllers{}
 }
@@ -51,7 +51,7 @@ func (con *controllers) CreateUser(c echo.Context) error {
 	
 	user := new(models.User)
 
-	v := con.Validate(c,user)
+	v := validatorReq.Validate(c,user)
 
 	if v != nil {
 		return v
@@ -74,18 +74,3 @@ func (con *controllers) CreateUser(c echo.Context) error {
 
 }
 
-func (con *controllers) Validate(c echo.Context, i interface{}) error {
-
-	v := validator.New()
-	if err := c.Bind(&i); err != nil {
-		c.JSON(http.StatusBadRequest, response.ResponseValidator(err.Error()))
-		return err
-	}
-
-	if err := v.Struct(i); err != nil {
-		c.JSON(http.StatusBadRequest, response.ResponseValidator(err.Error()))
-		return err
-	}
-
-	return nil;
-}

@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"demoecho/pkg/validators"
 	"demoecho/pkg/controllers"
 	"demoecho/pkg/repositories"
 	"demoecho/pkg/services"
@@ -9,6 +10,7 @@ import (
 )
 
 var (
+	
 	userRepo     	repositories.UserRepository       	= repositories.NewUserRepo()
 	userService     services.UserService       			= services.NewUserService(userRepo)
 	userControllers controllers.UserController 			= controllers.NewUserController(userService)
