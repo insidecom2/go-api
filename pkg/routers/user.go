@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"demoecho/pkg/validators"
 	"demoecho/pkg/controllers"
 	"demoecho/pkg/repositories"
 	"demoecho/pkg/services"

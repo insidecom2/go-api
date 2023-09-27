@@ -2,6 +2,7 @@ package validators
 
 import (
 	"strings"
+
 	// "demoecho/pkg/response"
 	"net/http"
 
@@ -9,9 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type validators struct {
-	// res response.Validator
-}
+type validators struct {}
 
 type Validator interface {
 	Validate(c echo.Context, i interface{}) error 
@@ -36,6 +35,12 @@ func (r *validators) Validate(c echo.Context, i interface{}) error {
 }
 
 func (r *validators) ResponseValidator(err string) []string {
-	return strings.Split(err,"\n")
+
+	var error []string
+	for _,s := range strings.Split(err,"\n"){
+		err := strings.Split(s,":")
+		error = append(error, err[2])
+	}
+	return error
 }
 
