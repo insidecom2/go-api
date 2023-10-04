@@ -1,24 +1,43 @@
 package response
 
-type Response struct {
+import "demoecho/pkg/constants"
+
+type ResponseOK struct {
 	Status string `json:"status"`
 	Message string `json:"message"`
 	Data interface{} `json:"data"`
 }
 
-func ResponseFail(message string) Response{
-	 m := Response{
-		Status: "false",
+type ResponseErr struct {
+	Error string `json:"error"`
+	Message string `json:"message"`
+}
+
+type ResponseReqErr struct {
+	Error string `json:"error"`
+	Message []string `json:"message"`
+}
+
+func ResponseFail(message string ) ResponseErr{
+	 m := ResponseErr{
+		Error: constants.ErrMsg["INTERVAL_ERROR"],
 		Message: message,
-		Data: nil,
 	 }
 
 	 return m
 }
 
+func ResponseReqFail(message []string ) ResponseReqErr{
+	 m := ResponseReqErr{
+		Error: constants.ErrMsg["INVALID_REQUEST"],
+		Message: message,
+	 }
 
-func ResponseSuccess(message string, data interface{}) Response{
-	 m := Response{
+	 return m
+}
+
+func ResponseSuccess(message string, data interface{}) ResponseOK{
+	 m := ResponseOK{
 		Status: "true",
 		Message: message,
 		Data: data,
