@@ -23,6 +23,7 @@ func main() {
 	database.AutoMigration()
 
 	// routes
+	routers.InitAuthRoute(e)
 	routers.InitUserRoute(e)
 
 	e.Logger.Fatal(e.Start(":8001"))

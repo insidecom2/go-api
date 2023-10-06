@@ -14,11 +14,20 @@ type validators struct {}
 
 type Validator interface {
 	Validate(c echo.Context, i interface{}) error 
+	BindData(c echo.Context, i interface{}) error 
 	ResponseValidator(err string) []string
 }
 
 func NewValidate() Validator {
 	return &validators{}
+}
+
+func (r *validators) BindData(c echo.Context, i interface{}) error  {
+	if err := c.Bind(&i); err != nil {
+		c.JSON(http.StatusBadRequest, response.ResponseReqFail( r.ResponseValidator(err.Error())))
+		return err
+	}
+	return nil;
 }
 
 func (r *validators) Validate(c echo.Context, i interface{}) error {
