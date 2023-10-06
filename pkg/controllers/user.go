@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"demoecho/pkg/validators"
 	"demoecho/pkg/models"
 	"demoecho/pkg/response"
 	"demoecho/pkg/services"
+	"demoecho/pkg/validators"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -60,7 +60,7 @@ func (con *controllers) CreateUser(c echo.Context) error {
 	result,err := userService.CreateUserService(*user)
  
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, response.ResponseFail("Cannot create user"))
+		return c.JSON(http.StatusBadRequest, response.ResponseFail(err.Error()))
 	}
 
 	resUser := &response.ResponseUser{

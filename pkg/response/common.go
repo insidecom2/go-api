@@ -3,7 +3,6 @@ package response
 import "demoecho/pkg/constants"
 
 type ResponseOK struct {
-	Status string `json:"status"`
 	Message string `json:"message"`
 	Data interface{} `json:"data"`
 }
@@ -38,7 +37,6 @@ func ResponseReqFail(message []string ) ResponseReqErr{
 
 func ResponseSuccess(message string, data interface{}) ResponseOK{
 	 m := ResponseOK{
-		Status: "true",
 		Message: message,
 		Data: data,
 	 }

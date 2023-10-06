@@ -3,7 +3,7 @@ package services
 import (
 	"demoecho/pkg/models"
 	"demoecho/pkg/repositories"
-	"log"
+	"demoecho/pkg/utils"
 )
 
 type UserService interface {
@@ -25,15 +25,18 @@ func NewUserService(repositories repositories.UserRepository) UserService {
 
 func (s *services) GetUserService(id string)  (models.User,error) {
 
-	log.Printf("Param2345 : %s",id)
-
 	result,err := userRepo.GetUserRepository(id)
 	
 	return result,err
 }
 
 func (s *services) CreateUserService(u models.User) (models.User,error){
-
+	passwordHash ,errHash := utils.HashPassword(u.Password)
+	if errHash != nil {
+		return u,errHash
+	}
+	
+	u.Password = passwordHash
 	result ,err := userRepo.CreateUserRepository(u)
 
 	if err != nil {
