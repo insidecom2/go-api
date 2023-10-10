@@ -26,6 +26,15 @@ func ResponseFail(message string ) ResponseErr{
 	 return m
 }
 
+func ResponseUnAuth(message string ) ResponseErr{
+	 m := ResponseErr{
+		Error: constants.ErrMsg["UNAUTHORIZE"],
+		Message: message,
+	 }
+
+	 return m
+}
+
 func ResponseReqFail(message []string ) ResponseReqErr{
 	 m := ResponseReqErr{
 		Error: constants.ErrMsg["INVALID_REQUEST"],

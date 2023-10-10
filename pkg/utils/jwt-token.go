@@ -8,9 +8,10 @@ import (
 )
 
 
-func GenerateToken(email string) (string,error) {
+func GenerateToken(email string) (string,string,error) {
 	
 	var jwtKey = []byte(os.Getenv("JWT_KEY"))
+	var jwtRefreshKey = []byte(os.Getenv("JWT_REFRESH_KEY"))
 	var err error
 
 	//Creating Access Token
@@ -19,10 +20,12 @@ func GenerateToken(email string) (string,error) {
 	atClaims["email"] = email
 	atClaims["exp"] = time.Now().Add(time.Hour * 2).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err := at.SignedString([]byte(jwtKey))
-	if err != nil {
-		return "", err
+	token, errToken := at.SignedString([]byte(jwtKey))
+	refreshToken, errRefresh := at.SignedString([]byte(jwtRefreshKey))
+
+	if errToken != nil || errRefresh != nil {
+		return "", "",err
 	}
-	return token, nil
+	return token,refreshToken, nil
 
 }

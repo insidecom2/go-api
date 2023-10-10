@@ -1,22 +1,20 @@
 package services
 
 import (
+	"demoecho/pkg/constants"
 	"demoecho/pkg/models"
 	"demoecho/pkg/repositories"
+	"demoecho/pkg/requests"
 	"demoecho/pkg/utils"
 	"errors"
 )
 
 
 
-type LoginBody struct {
-	Email string ` validate:"email,required"`
-	Password string ` validate:"required"`
-}
 
 type AuthService interface {
 	RegisterAuth(u models.User) (models.User,error)
-	LoginAuth(l LoginBody) (string,error)
+	LoginAuth(l requests.LoginBody) (string,string,error)
 }
 
 type authService struct {}
@@ -46,20 +44,20 @@ func (s *authService) RegisterAuth(u models.User) (models.User,error){
 
 }
 
-func  (s *authService) LoginAuth(l LoginBody) (string,error) {
+func  (s *authService) LoginAuth(l requests.LoginBody) (string,string,error) {
 	u,err := authRepo.GetUserRepositoryByEmail(l.Email)
 	if err != nil {
-		return "",err
+		return "","",err
 	}
 
 	isPasswordMatch := utils.ComparePassword(u.Password, l.Password)
 	if !isPasswordMatch {
-		return "",errors.New("Invalid Login")
+		return "","",errors.New(constants.ErrMsg["UNAUTHORIZE"])
 	}
 
-	token,e := utils.GenerateToken(u.Email)
+	token,refreshToken, e := utils.GenerateToken(u.Email)
 	if e != nil {
-		return "",errors.New("Invalid Login")
+		return "","",errors.New(constants.ErrMsg["UNAUTHORIZE"])
 	}
-	return token,nil
+	return token,refreshToken,nil
 }

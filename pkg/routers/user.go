@@ -15,12 +15,9 @@ var (
 )
 
 type UserRouter interface {
-	InitUserRoute(e *echo.Echo)
+	InitUserRoute(u *echo.Group)
 }
 
-func InitUserRoute(e *echo.Echo) {
-	v1 := e.Group("/api/v1")
-	{
-		v1.GET("/users/:id", userControllers.GetUser)
-	}
+func InitUserRoute(u *echo.Group) {
+	u.GET("/:id", userControllers.GetUser)
 }

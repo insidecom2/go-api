@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"demoecho/pkg/models"
+	"demoecho/pkg/requests"
 	"demoecho/pkg/response"
 	"demoecho/pkg/services"
 	"demoecho/pkg/validators"
@@ -30,14 +31,14 @@ func NewAuthController(services services.AuthService, validator validators.Valid
 }
 
 func (con *authController) Login(c echo.Context) (err error) {
-	login := new(services.LoginBody)
+	login := new(requests.LoginBody)
 	v := authValidatorReq.Validate(c,login)
 
 	if v != nil {
 		return v
 	}
 
-	token,err := authService.LoginAuth(*login)
+	token,refreshToken,err := authService.LoginAuth(*login)
  
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, response.ResponseFail(err.Error()))
@@ -45,6 +46,7 @@ func (con *authController) Login(c echo.Context) (err error) {
 
 	res := &response.LoginAuthRes{
 		TOKEN: token,
+		REFRESH_TOKEN: refreshToken,
 	}
 
 	return c.JSON(http.StatusOK, response.ResponseSuccess("OK",res))

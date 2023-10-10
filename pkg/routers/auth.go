@@ -17,13 +17,10 @@ var (
 )
 
 type AuthRouter interface {
-	InitAuthRoute(e *echo.Echo)
+	InitAuthRoute(g *echo.Group)
 }
 
-func InitAuthRoute(e *echo.Echo) {
-	v1 := e.Group("/api/v1")
-	{
-		v1.POST("/register", authControllers.Register)
-		v1.POST("/login", authControllers.Login)
-	}
+func InitAuthRoute(g *echo.Group) {
+	g.POST("/register", authControllers.Register)
+	g.POST("/login", authControllers.Login)
 }
