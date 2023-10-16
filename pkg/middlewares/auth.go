@@ -23,7 +23,6 @@ func Authorization(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, response.ResponseUnAuth("Invalid token"))
 		}
 		tokenString := authHeader[1]
-		c.Set("accessToken", tokenString)
 
 		token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return secretKey, nil
@@ -34,10 +33,37 @@ func Authorization(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
-			c.Set("claims", claims)
+			c.Set("email", claims.Email)
 			return next(c)
 		}
 
 		return c.JSON(http.StatusUnauthorized, response.ResponseUnAuth("Invalid token"))
 	}
+}
+
+func RefreshToken(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) (err error) {
+		secretKey := []byte(os.Getenv("JWT_REFRESH_KEY"))
+		authHeader := strings.Split(c.Request().Header.Get("Authorization"), " ")
+		if len(authHeader) < 2 {
+			return c.JSON(http.StatusUnauthorized, response.ResponseUnAuth("Invalid token"))
+		}
+		tokenString := authHeader[1]
+
+		token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return secretKey, nil
+		})
+
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, response.ResponseUnAuth("Invalid token"))
+		}
+		if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
+			c.Set("email", claims.Email)
+			return next(c)
+		}
+
+		return c.JSON(http.StatusUnauthorized, response.ResponseUnAuth("Invalid token"))
+
+	}
+
 }

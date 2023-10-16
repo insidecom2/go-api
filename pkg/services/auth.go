@@ -9,55 +9,65 @@ import (
 	"errors"
 )
 
-
-
-
 type AuthService interface {
-	RegisterAuth(u models.User) (models.User,error)
-	LoginAuth(l requests.LoginBody) (string,string,error)
+	RegisterAuth(u models.User) (models.User, error)
+	LoginAuth(l requests.LoginBody) (string, string, error)
+	RefreshAuth(email string) (string, string, error)
 }
 
-type authService struct {}
+type authService struct{}
 
 var (
-	authRepo  repositories.AuthRepository
+	authRepo repositories.AuthRepository
 )
 
-func NewAuthService(repository repositories.AuthRepository)AuthService {
+func NewAuthService(repository repositories.AuthRepository) AuthService {
 	authRepo = repository
 	return &authService{}
 }
 
-func (s *authService) RegisterAuth(u models.User) (models.User,error){
-	passwordHash ,errHash := utils.HashPassword(u.Password)
+func (s *authService) RegisterAuth(u models.User) (models.User, error) {
+	passwordHash, errHash := utils.HashPassword(u.Password)
 	if errHash != nil {
-		return u,errHash
+		return u, errHash
 	}
-	
+
 	u.Password = passwordHash
-	result ,err := authRepo.Register(u)
+	result, err := authRepo.Register(u)
 
 	if err != nil {
-		return u,err
+		return u, err
 	}
-	return result,nil
+	return result, nil
 
 }
 
-func  (s *authService) LoginAuth(l requests.LoginBody) (string,string,error) {
-	u,err := authRepo.GetUserRepositoryByEmail(l.Email)
+func (s *authService) LoginAuth(l requests.LoginBody) (string, string, error) {
+	u, err := authRepo.GetUserRepositoryByEmail(l.Email)
 	if err != nil {
-		return "","",err
+		return "", "", err
 	}
 
 	isPasswordMatch := utils.ComparePassword(u.Password, l.Password)
 	if !isPasswordMatch {
-		return "","",errors.New(constants.ErrMsg["UNAUTHORIZE"])
+		return "", "", errors.New(constants.ErrMsg["UNAUTHORIZE"])
 	}
 
-	token,refreshToken, e := utils.GenerateToken(u.Email)
+	token, refreshToken, e := utils.GenerateToken(u.Email)
 	if e != nil {
-		return "","",errors.New(constants.ErrMsg["UNAUTHORIZE"])
+		return "", "", errors.New(constants.ErrMsg["UNAUTHORIZE"])
 	}
-	return token,refreshToken,nil
+	return token, refreshToken, nil
+}
+
+func (s *authService) RefreshAuth(email string) (string, string, error) {
+	u, err := authRepo.GetUserRepositoryByEmail(email)
+	if err != nil {
+		return "", "", err
+	}
+	token, refreshToken, e := utils.GenerateToken(u.Email)
+	if e != nil {
+		return "", "", errors.New(constants.ErrMsg["UNAUTHORIZE"])
+	}
+	return token, refreshToken, nil
 }
