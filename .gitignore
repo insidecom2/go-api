@@ -23,3 +23,5 @@
 go.work
 
 db_posgres/*
+
+tmp/*
