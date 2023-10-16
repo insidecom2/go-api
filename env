@@ -9,3 +9,7 @@ TIMEZONE   = "Asia/Bangkok"
 
 #JWT
 JWT_KEY     = ""
+JWT_REFRESH_KEY = ""
+
+#Environment
+ENV = "development"

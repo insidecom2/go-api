@@ -6,6 +6,7 @@ import (
 	"demoecho/pkg/routers"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -23,11 +24,14 @@ func main() {
 	database.ConnectDB()
 
 	// migration //
-	database.AutoMigration()
+	if os.Getenv("ENV") == "development" {
+		database.AutoMigration()
+	}
 
 	// logger
 	e.Use(middleware.Logger())
-	// routes
+
+	// routes //
 	// auth
 	auth := e.Group(fmt.Sprintf("%s/auth", path))
 	routers.InitAuthRoute(auth)
