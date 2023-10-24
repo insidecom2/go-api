@@ -1,14 +1,16 @@
 version: "3.9"
 services:
-  backend:
-    build:
-      dockerfile: ./Dockerfile-dev
-    ports:
-      - 8001:8001
-    volumes:
-      - .:/app
-    depends_on:
-      - postgres
+  # backend:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./Dockerfile-dev
+  #   restart: always
+  #   ports:
+  #     - 8001:8001
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - postgres
 
   postgres:
     image: postgres
@@ -20,3 +22,15 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=db_go
+
+  # profile:
+  #   build:
+  #     context: ./profile
+  #     dockerfile: ./profile.service.Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 8002:8002
+  #   volumes:
+  #     - ./profile:/app
+  #   depends_on:
+  #     - postgres
