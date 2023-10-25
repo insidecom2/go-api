@@ -1,4 +1,4 @@
-module go-api/profile
+module profile
 
 go 1.20
 
