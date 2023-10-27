@@ -4,8 +4,11 @@ go 1.20
 
 require github.com/labstack/echo/v4 v4.11.2
 
+require github.com/jinzhu/inflection v1.0.0 // indirect
+
 require (
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/jinzhu/gorm v1.9.16
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect

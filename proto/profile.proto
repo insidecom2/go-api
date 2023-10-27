@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package services;
+
+service Profile {
+    rpc GetProfile(GetProfileRequest) returns(GetProfileResponse);
+    rpc UpdateProfile(UpdateProfileRequest) returns(UpdateProfileResponse);
+}
+
+/*
+    Profile
+    UserId   int64     `json:"user_id"  size:"10" validate:"required" gorm:"unique;not null"`
+	BirthDay time.Time `json:"birthday"`
+	Address  string    `json:"address"`
+	Phone    string    `json:"phone"`
+	Sex      string    `json:"sex"`
+	Age      int16     `json:"age"`
+*/
+
+message GetProfileRequest {
+    string user_id = 1;
+}
+
+message GetProfileResponse {
+    int64 user_id = 1;
+    string birthday = 2;
+    string address = 3;
+    string phone = 4;
+    string sex = 5;
+    int32 age = 6;
+}
+
+message UpdateProfileRequest {
+    int64 user_id = 1;
+    string birthday = 2;
+    string address = 3;
+    string phone = 4;
+    string sex = 5;
+    int32 age = 6;
+}
+
+message UpdateProfileResponse {
+    string result = 1;
+}
