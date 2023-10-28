@@ -25,3 +25,5 @@ go.work
 db_posgres/*
 
 tmp/*
+authen/tmp/*
+profile/tmp/*
