@@ -4,7 +4,10 @@ go 1.20
 
 require github.com/labstack/echo/v4 v4.11.2
 
-require github.com/jinzhu/inflection v1.0.0 // indirect
+require (
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0 // indirect
+)
 
 require (
 	github.com/golang/protobuf v1.5.3 // indirect
