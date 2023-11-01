@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	userRepo     	repositories.UserRepository       	= repositories.NewUserRepo()
-	userService     services.UserService       			= services.NewUserService(userRepo)
-	userControllers controllers.UserController 			= controllers.NewUserController(userService)
+	userRepo        repositories.UserRepository = repositories.NewUserRepo()
+	userService     services.UserService        = services.NewUserService(userRepo)
+	userControllers controllers.UserController  = controllers.NewUserController(userService)
 )
 
 type UserRouter interface {
