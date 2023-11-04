@@ -12,6 +12,7 @@ import (
 
 type UserClaims struct {
 	Email string `json:"email"`
+	Id    int64  `json:"id"`
 	jwt.StandardClaims
 }
 
@@ -29,7 +30,7 @@ func Authorization(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil {
-			return c.JSON(http.StatusUnauthorized, response.ResponseUnAuth("Invalid token"))
+			return c.JSON(http.StatusUnauthorized, response.ResponseUnAuth(err.Error()))
 		}
 
 		if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
