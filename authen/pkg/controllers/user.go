@@ -3,6 +3,8 @@ package controllers
 import (
 	"demoecho/pkg/response"
 	"demoecho/pkg/services"
+	"demoecho/pkg/utils"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -40,13 +42,13 @@ func NewUserController(servicesUser services.UserService) UserController {
 
 func (con *controllers) GetUser(c echo.Context) (err error) {
 
-	id := c.Param("id")
-
+	id := fmt.Sprint(c.Get("id"))
+	fmt.Print(utils.GetContext(c, "id"))
 	result, err := userService.GetUserService(id)
 	profile, errProfile := profileService.GetProfile(id)
 
 	if errProfile != nil {
-		log.Fatalf("Cannot get profile %v", errProfile)
+		fmt.Printf("Cannot get profile %v", errProfile)
 		return c.JSON(http.StatusBadRequest, response.ResponseFail("Cannot get profile"))
 	}
 

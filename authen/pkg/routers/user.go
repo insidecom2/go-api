@@ -19,5 +19,5 @@ type UserRouter interface {
 }
 
 func InitUserRoute(u *echo.Group) {
-	u.GET("/:id", userControllers.GetUser)
+	u.GET("", userControllers.GetUser)
 }

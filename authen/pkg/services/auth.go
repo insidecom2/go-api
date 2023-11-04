@@ -53,7 +53,11 @@ func (s *authService) LoginAuth(l requests.LoginBody) (string, string, error) {
 		return "", "", errors.New(constants.ErrMsg["UNAUTHORIZE"])
 	}
 
-	token, refreshToken, e := utils.GenerateToken(u.Email)
+	tokenProp := utils.GenerateTokenProp{
+		Email: u.Email,
+		Id:    u.ID,
+	}
+	token, refreshToken, e := utils.GenerateToken(tokenProp)
 	if e != nil {
 		return "", "", errors.New(constants.ErrMsg["UNAUTHORIZE"])
 	}
@@ -65,7 +69,11 @@ func (s *authService) RefreshAuth(email string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	token, refreshToken, e := utils.GenerateToken(u.Email)
+	tokenProp := utils.GenerateTokenProp{
+		Email: u.Email,
+		Id:    u.ID,
+	}
+	token, refreshToken, e := utils.GenerateToken(tokenProp)
 	if e != nil {
 		return "", "", errors.New(constants.ErrMsg["UNAUTHORIZE"])
 	}

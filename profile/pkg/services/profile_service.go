@@ -2,14 +2,18 @@ package services
 
 import (
 	context "context"
-	"fmt"
+	"profile/pkg/repositories"
 	"strconv"
 )
 
-type profileServer struct {
-}
+var (
+	profileRepo repositories.ProfileRepo
+)
 
-func NewProfileServer() ProfileServer {
+type profileServer struct{}
+
+func NewProfileServer(repository repositories.ProfileRepo) ProfileServer {
+	profileRepo = repository
 	return profileServer{}
 }
 
@@ -17,15 +21,13 @@ func (profileServer) mustEmbedUnimplementedProfileServer() {}
 
 func (profileServer) GetProfile(ctx context.Context, in *GetProfileRequest) (*GetProfileResponse, error) {
 	id, _ := strconv.ParseInt(in.UserId, 10, 64)
-	result := fmt.Sprintf("User Id %v", id)
-	res := GetProfileResponse{
-		UserId:   id,
-		Birthday: "2023-10-01",
-		Address:  result,
-		Phone:    "001",
-		Sex:      "Male",
-		Age:      20,
+	profile, err := profileRepo.GetProfile(id)
+	res := GetProfileResponse{}
+	if err != nil {
+		return &res, err
 	}
+
+	res.UserId = profile.UserId
 
 	return &res, nil
 }
