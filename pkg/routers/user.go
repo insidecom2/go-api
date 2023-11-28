@@ -1,17 +1,17 @@
 package routers
 
 import (
-	"demoecho/pkg/controllers"
-	"demoecho/pkg/repositories"
-	"demoecho/pkg/services"
+	handlers "demoecho/pkg/handlers/user"
+	repositories "demoecho/pkg/repositories/user"
+	services "demoecho/pkg/services/user"
 
 	"github.com/labstack/echo/v4"
 )
 
 var (
-	userRepo     	repositories.UserRepository       	= repositories.NewUserRepo()
-	userService     services.UserService       			= services.NewUserService(userRepo)
-	userControllers controllers.UserController 			= controllers.NewUserController(userService)
+	userRepo    repositories.UserRepository = repositories.NewUserRepo()
+	userService services.UserService        = services.NewUserService(userRepo)
+	userHandler handlers.UserHandler        = handlers.NewUserHandler(userService)
 )
 
 type UserRouter interface {
@@ -19,5 +19,6 @@ type UserRouter interface {
 }
 
 func InitUserRoute(u *echo.Group) {
-	u.GET("/:id", userControllers.GetUser)
+	u.GET("", userHandler.GetUser)
+	u.GET("/:id", userHandler.GetUserById)
 }
