@@ -28,6 +28,11 @@ func (profileServer) GetProfile(ctx context.Context, in *GetProfileRequest) (*Ge
 	}
 
 	res.UserId = profile.UserId
+	res.Address = profile.Address
+	res.Birthday = profile.BirthDay
+	res.Age = profile.Age
+	res.Phone = profile.Phone
+	res.Sex = profile.Sex
 
 	return &res, nil
 }

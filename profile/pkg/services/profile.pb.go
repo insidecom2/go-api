@@ -7,10 +7,12 @@
 package services
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
+	"time"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -73,11 +75,11 @@ type GetProfileResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	UserId   int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Birthday string `protobuf:"bytes,2,opt,name=birthday,proto3" json:"birthday,omitempty"`
+	Birthday time.Time `protobuf:"bytes,2,opt,name=birthday,proto3" json:"birthday,omitempty"`
 	Address  string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
 	Phone    string `protobuf:"bytes,4,opt,name=phone,proto3" json:"phone,omitempty"`
 	Sex      string `protobuf:"bytes,5,opt,name=sex,proto3" json:"sex,omitempty"`
-	Age      int32  `protobuf:"varint,6,opt,name=age,proto3" json:"age,omitempty"`
+	Age      int16  `protobuf:"varint,6,opt,name=age,proto3" json:"age,omitempty"`
 }
 
 func (x *GetProfileResponse) Reset() {
