@@ -13,3 +13,5 @@ JWT_REFRESH_KEY = ""
 
 #Environment
 ENV = "development"
+
+PORT="8080"

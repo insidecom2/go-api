@@ -20,6 +20,8 @@ func main() {
 	if err != nil {
 		log.Panic("Cannot get .env file")
 	}
+
+	port := os.Getenv("PORT")
 	// connect DB //
 	database.ConnectDB()
 
@@ -40,5 +42,5 @@ func main() {
 	user.Use(middlewares.Authorization)
 	routers.InitUserRoute(user)
 
-	e.Logger.Fatal(e.Start(":8001"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", port)))
 }

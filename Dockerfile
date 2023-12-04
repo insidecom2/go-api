@@ -1,11 +1,14 @@
 FROM golang:1.17-alpine AS builder
 WORKDIR /app
 COPY . .
-RUN go build -o ./go-api ./server.go
+RUN go mod download
+RUN go build -o go-api
 
 FROM alpine:latest AS runner
 WORKDIR /app
-COPY --from=builder /app/go-api .
-EXPOSE 8000
-ENTRYPOINT ["./go-api"]
+COPY --from=builder /app/go-api /app/go-api
+COPY .env .
+ENV $(cat .env | xargs)
+EXPOSE 8080
+
 CMD [ "./go-api" ]
