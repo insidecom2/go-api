@@ -4,6 +4,7 @@
 # Binaries for programs and plugins
 .env
 .env.docker
+.env.*
 *.exe
 *.exe~
 *.dll

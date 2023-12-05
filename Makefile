@@ -5,6 +5,10 @@
 # 	docker-compose -f docker-compose.dev.yml down
 build:     
 	go build -o ./go-api ./server.go      
+build-image-gcloud:     
+	docker build -t asia.gcr.io/clound-run-407009/go-api .  	
+push-image-gcloud:     
+	docker push asia.gcr.io/clound-run-407009/go-api      	
 run:     
 	go run server.go 
 runcontainer:     
