@@ -7,7 +7,6 @@ RUN go build -o go-api
 FROM alpine:latest AS runner
 WORKDIR /app
 COPY --from=builder /app/go-api /app/go-api
-COPY .env .
 ENV $(cat .env | xargs)
 EXPOSE 8080
 

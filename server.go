@@ -21,7 +21,7 @@ func main() {
 		log.Panic("Cannot get .env file")
 	}
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("PORT_API")
 	// connect DB //
 	database.ConnectDB()
 
